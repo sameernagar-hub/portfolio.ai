@@ -123,7 +123,7 @@ const profileContext = {
     github: 'https://github.com/sameernagar-hub'
   },
   education: [
-    'MS in Computer Science, California State University, Fullerton, 2024 - 2026, GPA 3.70/4.00.',
+    'MS in Computer Science, California State University, Fullerton. Graduated May 2026, GPA 3.70/4.00.',
     'BTech in Computer Science, Rajiv Gandhi Proudyogiki Vishwavidyalaya, India, 2018 - 2022, GPA 3.66/4.00.'
   ],
   experience: [
@@ -251,7 +251,12 @@ const localAssistantResponse = (userMessage) => {
 };
 
 const askLiveAssistant = async (message) => {
-  const response = await fetch('/api/chat', {
+  // Use relative path for production; fallback to localhost for local FastAPI dev
+  const origin = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:8000' 
+    : '';
+  console.log(`Connecting to AI Assistant at: ${origin || 'Relative Path'}/api/chat`);
+  const response = await fetch(`${origin}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

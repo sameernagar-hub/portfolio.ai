@@ -11,7 +11,7 @@ This is a responsive static portfolio built with HTML, CSS, and JavaScript. It h
 - `index.html` - Main portfolio page.
 - `assets/css/style.css` - Responsive visual system.
 - `assets/js/script.js` - Navigation, filters, contact form, and chat widget.
-- `api/chat.js` - Serverless OpenAI Responses API proxy for the AI assistant.
+- `api/chat.js` - Serverless Google Gemini API proxy for the AI assistant.
 - `Sameer_Nagar_Resume.pdf` - Resume download linked from the portfolio.
 
 ## AI Assistant
@@ -19,13 +19,13 @@ This is a responsive static portfolio built with HTML, CSS, and JavaScript. It h
 The chat widget works in two modes:
 
 1. Local profile mode: always available in the browser with resume-aware fallback answers.
-2. Live AI mode: available when deployed with a serverless `/api/chat` endpoint and `OPENAI_API_KEY`.
+2. Live AI mode: available when deployed with a serverless `/api/chat` endpoint and `GEMINI_API_KEY`.
 
 Create an environment variable in your hosting provider:
 
 ```bash
-OPENAI_API_KEY=your_api_key_here
-OPENAI_MODEL=gpt-5.4-mini
+GEMINI_API_KEY=your_api_key_here
+GEMINI_MODEL=gemini-1.5-flash
 ```
 
 `OPENAI_MODEL` is optional. The endpoint defaults to `gpt-5.4-mini`.
