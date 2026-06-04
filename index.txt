@@ -1,0 +1,106 @@
+Sameer Nagar - Software Development Engineer Portfolio
+
+# Sidebar
+
+Sameer Nagar
+Software Development Engineer
+Backend | AI | Cloud
+
+Email
+nagarsam8989@gmail.com
+
+Phone
++1 (657) 751-9425
+
+Location
+Fullerton, California
+
+Resume
+Sameer_Nagar_Resume.pdf
+
+LinkedIn
+https://www.linkedin.com/in/aavonsameer/
+
+GitHub
+https://github.com/sameernagar-hub
+
+# Navigation
+
+About
+Resume
+Work
+Notes
+Contact
+
+# About
+
+Software Development Engineer focused on backend systems, AI-powered applications, and cloud-ready product engineering.
+
+MS Computer Science student at California State University, Fullerton with around three years of software development experience. Builds scalable APIs, automation workflows, LLM-enabled products, and full-stack systems that are practical, secure, and maintainable.
+
+Engineering Focus
+
+Backend Development
+API design, scalable service architecture, data flows, and production-ready backend systems with Python, Java, Node.js, and Flask.
+
+AI Integration
+LLM-powered workflows, prompt engineering, conversational experiences, and intelligent automation for real product use cases.
+
+Cloud & DevOps
+AWS, Azure, Docker, CI/CD, deployment automation, and cloud infrastructure practices for reliable delivery.
+
+Full-Stack Delivery
+React interfaces, Node.js services, SQL/NoSQL databases, and practical product implementation across the full SDLC.
+
+# Resume
+
+Experience
+
+Jr. Associate Software Engineer
+Unthinkable Solutions, Gurugram, India | 2021 - 2024
+Engineered scalable backend services and full-stack applications for enterprise workflows. Built AI-powered solutions using LLM integrations and automation while delivering production-grade software across the SDLC.
+
+Teaching Associate
+California State University, Fullerton | 2025 - 2026
+Mentored students on computer science concepts, supported coursework, graded assignments, and collaborated with faculty.
+
+Service Associate
+California State University, Fullerton | 2025 - 2026
+Handled customer service, transactions, inventory, and team operations.
+
+Education
+
+Master of Science in Computer Science
+California State University, Fullerton | 2024 - 2026
+GPA: 3.70/4.00
+
+Bachelor of Technology in Computer Science
+Rajiv Gandhi Proudyogiki Vishwavidyalaya, India | 2018 - 2022
+GPA: 3.66/4.00
+
+Skills
+Python, Java, C++, JavaScript, React, Node.js, Flask, MySQL, MongoDB, AWS, Azure, Docker, CI/CD, LLMs, Prompt Engineering, Agentic AI, Salesforce Development.
+
+# Work
+
+Scalable API Services
+Backend
+
+LLM Portfolio Assistant
+AI/ML
+
+Task Manager Application
+Full-Stack
+
+ML Pipeline Automation
+AI/ML
+
+Data Pipeline Services
+Backend
+
+Cloud Operations Dashboard
+Cloud
+
+# Contact
+
+Email Sameer at nagarsam8989@gmail.com or connect through LinkedIn and GitHub.
