@@ -129,6 +129,10 @@
           </li>
 
           <li class="navbar-item">
+            <button class="navbar-link" type="button" data-nav-link data-target="agent">AI Agent</button>
+          </li>
+
+          <li class="navbar-item">
             <button class="navbar-link" type="button" data-nav-link data-target="contact">Contact</button>
           </li>
         </ul>
@@ -594,6 +598,59 @@ experience: ~3 years + Graduated May 2026</code></pre>
             </button>
           </form>
         </section>
+      </article>
+
+      <article class="page" data-page="agent">
+        <header class="page-header">
+          <p class="section-kicker">Interactive</p>
+          <h2 class="h2 article-title">AI Assistant</h2>
+          <button class="btn ghost" id="newChatBtn" style="margin-left: auto; border: 1px solid var(--jet); padding: 8px 15px;">
+            <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+            <span>New Chat</span>
+          </button>
+        </header>
+
+        <section class="agent-chat-section" style="display: flex; flex-direction: column; height: calc(100vh - 250px); min-height: 500px; background: var(--eerie-black-2); border: 1px solid var(--jet); border-radius: 20px; overflow: hidden;">
+          <div id="agentMessages" style="flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Messages appear here -->
+            <div class="message bot-message" style="background: var(--onyx); padding: 15px 20px; border-radius: 15px; border-bottom-left-radius: 2px; max-width: 80%; align-self: flex-start; color: var(--light-gray); line-height: 1.6;">
+              <p>Hi! I'm Sameer's AI Agent. I've been trained on his resume, projects, and technical expertise. Ask me anything about his work, or even general technical questions!</p>
+            </div>
+          </div>
+
+          <div style="padding: 20px; background: var(--smoky-black); border-top: 1px solid var(--jet);">
+            <form id="agentForm" style="display: flex; gap: 15px; background: var(--eerie-black-1); padding: 10px; border-radius: 15px; border: 1px solid var(--jet);">
+              <input type="text" id="agentInput" placeholder="Type your message here..." autocomplete="off" style="flex: 1; background: transparent; border: none; color: var(--white-2); padding: 10px; outline: none; font-family: inherit;">
+              <button type="submit" id="agentSendBtn" style="background: var(--orange-yellow-crayola); color: var(--smoky-black); padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.2s; display: flex; align-items: center; gap: 8px;">
+                <span>Send</span>
+                <ion-icon name="send-outline"></ion-icon>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <style>
+          .agent-user-message {
+            background: var(--orange-yellow-crayola) !important;
+            color: var(--smoky-black) !important;
+            align-self: flex-end !important;
+            border-radius: 15px !important;
+            border-bottom-right-radius: 2px !important;
+            padding: 15px 20px;
+            max-width: 80%;
+          }
+          .agent-bot-message {
+            background: var(--onyx) !important;
+            color: var(--light-gray) !important;
+            align-self: flex-start !important;
+            border-radius: 15px !important;
+            border-bottom-left-radius: 2px !important;
+            padding: 15px 20px;
+            max-width: 80%;
+            line-height: 1.6;
+          }
+          .is-pending { opacity: 0.7; font-style: italic; }
+        </style>
       </article>
     </div>
   </main>

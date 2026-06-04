@@ -71,7 +71,7 @@ module.exports = async function handler(req, res) {
   }
 
   const history = formatHistoryForGemini(body.history || []);
-  const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const modelName = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
   
   const systemInstruction = `You are Sameer Nagar's portfolio assistant. 
   Answer only from the portfolio context provided. Be concise, warm, and specific.

@@ -1,4 +1,5 @@
 import os
+import traceback
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -33,21 +34,45 @@ class ChatRequest(BaseModel):
     history: List[ChatMessage] = []
 
 PROFILE_CONTEXT = """
-Sameer Nagar is a Software Development Engineer. 
-MS in Computer Science from CSU Fullerton (Graduated May 2026, GPA 3.7).
-Former Software Engineer at Unthinkable Solutions.
-Expertise: Python, Java, AWS, Agentic AI, and Scalable Backend Systems.
+Sameer Nagar is a Software Development Engineer focused on backend systems, AI integration, cloud platforms, and full-stack delivery.
+
+Contact:
+- Email: nagarsam8989@gmail.com
+- Phone: +1 (657) 751-9425
+- Location: Fullerton, California
+- LinkedIn: https://www.linkedin.com/in/aavonsameer/
+- GitHub: https://github.com/sameernagar-hub
+
+Education:
+- Master of Science in Computer Science, California State University, Fullerton. Graduated May 2026, GPA 3.70/4.00.
+- Bachelor of Technology in Computer Science, Rajiv Gandhi Proudyogiki Vishwavidyalaya, India, 2018 - 2022, GPA 3.66/4.00.
+
+Experience:
+- Jr. Associate Software Engineer, Unthinkable Solutions, Gurugram, India, 2021 - 2024. Built scalable backend services, full-stack applications, enterprise workflows, AI-powered solutions, LLM integrations, and automation.
+- Teaching Associate, California State University, Fullerton, 2025 - 2026. Mentored students, supported computer science coursework, graded assignments, and collaborated with faculty.
+- Service Associate, California State University, Fullerton, 2025 - 2026. Delivered customer service, transactions, inventory support, and team operations.
+
+Skills:
+- Python, Java, C++, JavaScript, React, Node.js, Flask, MySQL, MongoDB, AWS, Azure, Docker, CI/CD, LLMs, Prompt Engineering, Agentic AI, Salesforce Development.
+
+Project themes:
+- Scalable API services, LLM portfolio assistant, task manager application, ML pipeline automation, data pipeline services, cloud operations dashboard.
 """
 
 # Configure Gemini with System Instruction
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = (os.getenv("GEMINI_API_KEY") or "").strip()
 if not api_key:
-    print("WARNING: GEMINI_API_KEY not found in environment variables.")
+    print("ERROR: GEMINI_API_KEY is empty or missing in .env")
+else:
+    print(f"API Key loaded successfully (Length: {len(api_key)})")
 
-genai.configure(api_key=api_key)
+# Using transport='rest' fixes 404/NotFound errors on many Windows/Python 3.14 setups
+genai.configure(api_key=api_key, transport='rest')
+
+model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
-    system_instruction=f"You are Sameer's Portfolio Assistant. Context: {PROFILE_CONTEXT}"
+    model_name=model_name,
+    system_instruction=f"You are Sameer Nagar's Professional AI Agent. Your goal is to represent Sameer by answering questions about his expertise, resume, and projects using this context: {PROFILE_CONTEXT}. You are also a world-class engineer, so you can answer general technical questions, but always try to relate them back to Sameer's skills when relevant. Be professional, concise, and helpful."
 )
 
 @app.post("/api/chat")
@@ -58,15 +83,24 @@ async def chat_endpoint(request: ChatRequest):
     try:
         # Initialize chat with history
         chat = model.start_chat(history=[
-            {"role": "user" if m.role == "user" else "model", "parts": [m.content]}
+            {"role": "user" if m.role == "user" else "model", "parts": [{"text": m.content}]}
             for m in request.history
         ])
 
         response = chat.send_message(request.message)
         
-        return {"reply": response.text}
+        # Accessing .text can fail if the model blocked the response (Safety Filters)
+        try:
+            reply_text = response.text
+        except (ValueError, AttributeError):
+            reply_text = "I'm sorry, I can't provide an answer to that right now. Please try asking something else about my experience."
+            
+        return {"reply": reply_text}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log the actual error to your terminal for debugging
+        print(f"AI Assistant Error: {str(e)}")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Internal AI Processing Error")
 
 @app.get("/api/projects")
 async def get_projects():

@@ -104,15 +104,23 @@ if (form) {
   });
 }
 
-const chatWidget = document.getElementById('chatWidget');
-const chatWidgetBtn = document.getElementById('chatWidgetBtn');
-const chatToggleBtn = document.getElementById('chatToggleBtn');
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const chatForm = document.getElementById('chatForm');
+// --- Full-Page Agent Logic ---
+const agentMessages = document.getElementById('agentMessages');
+const agentInput = document.getElementById('agentInput');
+const agentForm = document.getElementById('agentForm');
+const agentSendBtn = document.getElementById('agentSendBtn');
+const newChatBtn = document.getElementById('newChatBtn');
+
+// Quick Widget (kept for backwards compatibility)
+const chatWidget = document.getElementById('chatWidget'); 
+const chatWidgetBtn = document.getElementById('chatWidgetBtn'); 
+const chatToggleBtn = document.getElementById('chatToggleBtn'); 
+const chatMessages = document.getElementById('chatMessages'); 
+const chatInput = document.getElementById('chatInput'); 
+const chatForm = document.getElementById('chatForm'); 
 const chatSendBtn = document.getElementById('chatSendBtn');
 
-const profileContext = {
+const profileContext = { 
   name: 'Sameer Nagar',
   role: 'Software Development Engineer focused on backend systems, AI integration, cloud platforms, and full-stack delivery.',
   contact: {
@@ -160,7 +168,15 @@ const profileContext = {
   ]
 };
 
-const conversationHistory = [];
+let conversationHistory = JSON.parse(localStorage.getItem('agent_history')) || [];
+
+const saveHistory = () => {
+  localStorage.setItem('agent_history', JSON.stringify(conversationHistory));
+};
+
+const clearHistory = () => {
+  localStorage.removeItem('agent_history');
+};
 
 const openChat = () => {
   if (!chatWidget || !chatWidgetBtn) return;
@@ -178,18 +194,18 @@ const closeChat = () => {
 if (chatWidgetBtn) chatWidgetBtn.addEventListener('click', openChat);
 if (chatToggleBtn) chatToggleBtn.addEventListener('click', closeChat);
 
-const appendMessage = (message, type, options = {}) => {
-  if (!chatMessages) return null;
+const appendMessage = (container, message, type, options = {}) => {
+  if (!container) return null;
 
   const messageElement = document.createElement('div');
-  messageElement.className = `message ${type}-message`;
+  messageElement.className = container.id === 'agentMessages' ? `agent-${type}-message` : `message ${type}-message`;
   if (options.pending) messageElement.classList.add('is-pending');
 
   const paragraph = document.createElement('p');
   paragraph.textContent = message;
   messageElement.appendChild(paragraph);
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  container.appendChild(messageElement);
+  container.scrollTop = container.scrollHeight;
 
   return messageElement;
 };
@@ -282,36 +298,73 @@ const setChatLoading = (isLoading) => {
   if (chatInput) chatInput.disabled = isLoading;
 };
 
+const setAgentLoading = (isLoading) => {
+  if (agentSendBtn) agentSendBtn.disabled = isLoading;
+  if (agentInput) agentInput.disabled = isLoading;
+};
+
 const sendChatMessage = async (event) => {
   event.preventDefault();
-  if (!chatInput) return;
+  const isWidget = event.currentTarget.id === 'chatForm';
+  const input = isWidget ? chatInput : agentInput;
+  const container = isWidget ? chatMessages : agentMessages;
+  const setLoading = isWidget ? setChatLoading : setAgentLoading;
 
-  const userMessage = chatInput.value.trim();
+  if (!input) return;
+  const userMessage = input.value.trim();
   if (!userMessage) return;
 
-  appendMessage(userMessage, 'user');
+  appendMessage(container, userMessage, 'user');
   conversationHistory.push({ role: 'user', content: userMessage });
-  chatInput.value = '';
-  setChatLoading(true);
+  saveHistory();
+  input.value = '';
+  setLoading(true);
 
-  const pendingMessage = appendMessage('Thinking...', 'bot', { pending: true });
+  const pendingMessage = appendMessage(container, 'Thinking...', 'bot', { pending: true });
 
   try {
     const reply = await askLiveAssistant(userMessage);
     removeMessage(pendingMessage);
-    appendMessage(reply, 'bot');
+    appendMessage(container, reply, 'bot');
     conversationHistory.push({ role: 'assistant', content: reply });
+    saveHistory();
   } catch (error) {
     const fallbackReply = localAssistantResponse(userMessage);
     removeMessage(pendingMessage);
-    appendMessage(fallbackReply, 'bot');
+    appendMessage(container, fallbackReply, 'bot');
     conversationHistory.push({ role: 'assistant', content: fallbackReply });
+    saveHistory();
   } finally {
-    setChatLoading(false);
-    if (chatInput) chatInput.focus();
+    setLoading(false);
+    if (input) input.focus();
   }
 };
 
-if (chatForm) {
-  chatForm.addEventListener('submit', sendChatMessage);
+// Initialize agent history on load
+window.addEventListener('DOMContentLoaded', () => {
+  if (agentMessages && conversationHistory.length > 0) {
+    agentMessages.innerHTML = '';
+    conversationHistory.forEach(msg => {
+      appendMessage(agentMessages, msg.content, msg.role === 'user' ? 'user' : 'bot');
+    });
+  }
+});
+
+if (chatForm) chatForm.addEventListener('submit', sendChatMessage);
+if (agentForm) agentForm.addEventListener('submit', sendChatMessage);
+
+if (newChatBtn) {
+  newChatBtn.addEventListener('click', () => {
+    if (confirm('Start a new conversation? Previous history will be cleared.')) {
+      clearHistory();
+      conversationHistory = [];
+      if (agentMessages) {
+        agentMessages.innerHTML = `
+          <div class="agent-bot-message">
+            <p>Hi! I'm Sameer's AI Agent. I've been reset. How can I help you today?</p>
+          </div>
+        `;
+      }
+    }
+  });
 }
