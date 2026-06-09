@@ -1,4 +1,4 @@
-# Sameer Nagar AI Dev Portfolio
+# portfolio.ai
 
 AI-first portfolio app for Sameer Nagar. The main experience is now a dark, CLI-inspired Python app with a ChatGPT-style homepage, sidebar navigation, responsive layouts, animated dev-tool panels, and a resume-aware AI assistant.
 
